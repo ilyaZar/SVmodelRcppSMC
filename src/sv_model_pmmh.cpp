@@ -24,6 +24,7 @@
 #include "SVmodelPMMH.h"
 
 namespace SVmodelPMMH {
+    const double phi_x = 0.9;
     const double a_prior = 0.01;
     const double b_prior = 0.01;
 }
@@ -63,14 +64,14 @@ Rcpp::DataFrame sv_model_pmmh_cpp(arma::vec data,
         smc::sampler<double,smc::nullParams> Sampler(lNumber,
                                                      HistoryType::NONE,
                                                      myMove);
-        theta_prop.sigv = 10.0;
-        theta_prop.sigw = 10.0;
+        theta_prop.sigv = 2.0;
+        theta_prop.sigw = 2.0;
 
         sigv(0) = theta_prop.sigv;
         sigw(0) = theta_prop.sigw;
 
-        Rcpp::NumericVector sigvInnovation = Rcpp::rnorm(lMCMCits,0,0.15);
-        Rcpp::NumericVector sigwInnovation = Rcpp::rnorm(lMCMCits,0,0.08);
+        Rcpp::NumericVector sigvInnovation = Rcpp::rnorm(lMCMCits, 0, 0.1);
+        Rcpp::NumericVector sigwInnovation = Rcpp::rnorm(lMCMCits, 0, 0.1);
         Rcpp::NumericVector unifRands = Rcpp::runif(lMCMCits);
 
         // Getting a particle filtering estimate of the log likelihood.
@@ -152,11 +153,15 @@ namespace SVmodelPMMH {
     /// \param X            A reference to the empty particle value
     /// \param logweight    A reference to the empty particle log weight
     /// \param param        Additional algorithm parameters
-    void SVmodelPMMH_move::pfInitialise(double & X, double & logweight, smc::nullParams & param)
+    void SVmodelPMMH_move::pfInitialise(double & X,
+                                        double & logweight,
+                                        smc::nullParams & param)
     {
-        X = R::rnorm(0.0,sqrt(5.0));
-        double mean = std::pow(X,2)/20.0;
-        logweight = R::dnorm(y(0),mean,theta_prop.sigw,TRUE);
+        X = R::rnorm(0.0, sqrt(5.0));
+        double sd = theta_prop.sigw * exp(X);
+        logweight = R::dnorm(y(0), 0.0, sd,TRUE);
+        // double mean = std::pow(X,2)/20.0;
+        // logweight = R::dnorm(y(0),mean,theta_prop.sigw,TRUE);
     }
 
     /// The proposal function.
@@ -165,11 +170,16 @@ namespace SVmodelPMMH {
     /// \param X            A reference to the current particle value
     /// \param logweight    A reference to the current particle log weight
     /// \param param        Additional algorithm parameters
-    void SVmodelPMMH_move::pfMove(long lTime, double & X, double & logweight, smc::nullParams & param)
+    void SVmodelPMMH_move::pfMove(long lTime,
+                                  double & X,
+                                  double & logweight,
+                                  smc::nullParams & param)
     {
-        X = X/2.0 + 25.0*X/(1+std::pow(X,2)) + 8*cos(1.2*(lTime+1)) + R::rnorm(0.0,theta_prop.sigv);
-        double mean = std::pow(X,2)/20.0;
-        logweight += R::dnorm(y(lTime),mean,theta_prop.sigw,TRUE);
+        // X = X/2.0 + 25.0*X/(1+std::pow(X,2)) + 8*cos(1.2*(lTime+1)) + R::rnorm(0.0,theta_prop.sigv);
+        X = phi_x * X + R::rnorm(0.0, theta_prop.sigv);
+        double sd = theta_prop.sigw * exp(X);
+        logweight += R::dnorm(y(lTime), 0.0, sd, TRUE);
+        // logweight += R::dnorm(y(lTime),mean,theta_prop.sigw,TRUE);
     }
 
 }
