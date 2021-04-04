@@ -1,0 +1,13 @@
+{
+    "dialog-state": {
+        "query": "RickerExample.so",
+        "path": "~/Dropbox/projects/gsoc21/SVmodelPMMH",
+        "regex": false,
+        "caseSensitive": false,
+        "filePatterns": [],
+        "excludeFilePatterns": [],
+        "resultsCount": 0,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

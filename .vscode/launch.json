@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "R-Debugger",
+            "request": "launch",
+            "name": "Launch Workspace",
+            "debugMode": "workspace",
+            "workingDirectory": "${workspaceFolder}",
+            "allowGlobalDebugging": true,
+            "debuggedPackages": ["SCmodelExamples"]
+        },
+        {
+            "type": "R-Debugger",
+            "request": "launch",
+            "name": "Debug R-File",
+            "debugMode": "file",
+            "workingDirectory": "${workspaceFolder}",
+            "file": "${file}",
+            "allowGlobalDebugging": true,
+            "debuggedPackages": ["SCmodelExamples"]
+        },
+        {
+            "type": "R-Debugger",
+            "request": "launch",
+            "name": "Debug R-Function",
+            "debugMode": "function",
+            "workingDirectory": "${workspaceFolder}",
+            "file": "${file}",
+            "mainFunction": "main",
+            "allowGlobalDebugging": false,
+            "debuggedPackages": ["SCmodelExamples"]
+        },
+        {
+            "type": "R-Debugger",
+            "request": "attach",
+            "name": "Attach to R process",
+            "splitOverwrittenOutput": true,
+            "debuggedPackages": ["SCmodelExamples"]
+        }
+    ]
+}

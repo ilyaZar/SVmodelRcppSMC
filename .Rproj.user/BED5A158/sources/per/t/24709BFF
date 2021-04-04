@@ -1,0 +1,24 @@
+{
+    "id": "24709BFF",
+    "path": "~/Dropbox/projects/gsoc21/SVmodelPMMH/R/simNonlin.R",
+    "project_path": "R/simNonlin.R",
+    "type": "r_source",
+    "hash": "2551295992",
+    "contents": "",
+    "dirty": false,
+    "created": 1617544256849.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "cursorPosition": "10,36",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1617544315,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1617544315177,
+    "read_only": false,
+    "read_only_alternatives": []
+}

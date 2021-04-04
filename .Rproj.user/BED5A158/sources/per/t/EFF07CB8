@@ -1,0 +1,25 @@
+{
+    "id": "EFF07CB8",
+    "path": "~/Dropbox/projects/gsoc21/SVmodelPMMH/R/nonLinPMMH.R",
+    "project_path": "R/nonLinPMMH.R",
+    "type": "r_source",
+    "hash": "4057264601",
+    "contents": "",
+    "dirty": false,
+    "created": 1617548580837.0,
+    "source_on_save": false,
+    "relative_order": 12,
+    "properties": {
+        "cursorPosition": "11,0",
+        "scrollLine": "0",
+        "marks": "<:33,23\n>:33,37"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1617549479,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1617549479489,
+    "read_only": false,
+    "read_only_alternatives": []
+}
