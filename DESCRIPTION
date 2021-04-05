@@ -1,4 +1,4 @@
-Package: SVmodelExamples
+Package: SVmodelRcppSMC
 Type: Package
 Title: RcppSMC package example for a Stochastic volatitly model
 Version: 0.0.900
@@ -7,5 +7,10 @@ Authors@R: person("Ilya","Zarubin",role=c("aut","cre"), email="zarubin@wiso.uni-
 Description: An example of using RcppSMC package for a Stochastic volatitly model.
 License: GPL (>= 2)
 LazyLoad: yes
-LinkingTo: RcppSMC, Rcpp, RcppArmadillo
+Depends: 
+    R (>= 3.5)
+Imports: 
+    ggplot2,
+    rlang
+LinkingTo: Rcpp, RcppArmadillo, RcppSMC
 RoxygenNote: 7.1.1

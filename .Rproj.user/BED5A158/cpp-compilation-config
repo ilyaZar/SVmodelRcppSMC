@@ -8,9 +8,9 @@
         "-I/usr/local/include",
         "-I/usr/include/x86_64-linux-gnu",
         "-I/usr/include",
-        "-I/home/iz/Dropbox/libraries/R/4.0/RcppSMC/include",
         "-I/home/iz/Dropbox/libraries/R/4.0/Rcpp/include",
         "-I/home/iz/Dropbox/libraries/R/4.0/RcppArmadillo/include",
+        "-I/home/iz/Dropbox/libraries/R/4.0/RcppSMC/include",
         "-std=gnu++11",
         "-I/usr/share/R/include",
         "-DNDEBUG",
@@ -18,5 +18,5 @@
     ],
     "pch": "RcppArmadillo",
     "is_cpp": true,
-    "hash": "15932685501617623501"
+    "hash": "15932685501617655984"
 }

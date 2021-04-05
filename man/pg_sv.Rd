@@ -6,24 +6,25 @@
 \usage{
 pg_sv(
   y,
-  Nparticles,
+  num_particles,
   starting_values,
-  Niter,
-  XcondInit,
+  num_iter,
+  x_r_init,
+  as_sampling,
   num_progress_outputs = 10
 )
 }
 \arguments{
 \item{y}{measurements i.e. observations of latent state process}
 
-\item{Nparticles}{number of particles}
+\item{num_particles}{number of particles}
 
 \item{starting_values}{vector of three giving the starting values for the 
 parameters in the following order: phi_x, sigma_x, and beta_y}
 
-\item{Niter}{number of PG iterations}
+\item{num_iter}{number of PG iterations}
 
-\item{XcondInit}{initial particle (trajectory) to condition on}
+\item{x_r_init}{initial particle to condition on (reference trajectory)}
 }
 \value{
 

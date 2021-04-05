@@ -1,3 +1,16 @@
+#' Boostrap Particle Filter for the toy SV model
+#' 
+#' Computes, besides other things, an estimate of the log-likelihood.
+#'
+#' @param NN number of particles
+#' @param yt measurements/data of the unobservered latent state process
+#' @param phi_x phi parameter (see model equations for details)
+#' @param sigma_x sigma parameter (see model equations for details)
+#' @param beta_y beta parameter (see model equations for details)
+#'
+#' @return a list of one element (was previously returniong more) giving the 
+#'   log-likelihood estimate
+#' @export
 bpf_pmmh <- function(NN, yt, phi_x, sigma_x, beta_y) {
   # Bookkeeping:
   TT      <- length(yt) + 1
@@ -34,9 +47,10 @@ bpf_pmmh <- function(NN, yt, phi_x, sigma_x, beta_y) {
     loglik       <- loglik + log_weight_max + log(sum(log_weights_normalized))
   }
   loglik <- loglik - (T - 1) * log(NN)
-  x_fltr <- apply(p_store * w_store, 2, sum)
-  return(list(x_fltr = x_fltr, loglik = loglik,
-              p_store = p_store, w_store = w_store))
+  # x_fltr <- apply(p_store * w_store, 2, sum)
+  # return(list(x_fltr = x_fltr, loglik = loglik,
+  #             p_store = p_store, w_store = w_store))
+  return(list(loglik = loglik))
 }
 #' Runs a Particle Marginal Metropolis Hastings on the toy SV model
 #'

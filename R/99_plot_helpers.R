@@ -115,3 +115,40 @@ plot_parameter_post_results <- function(samples,
                  ylab = expression(beta),
                  col = "darkblue")
 }
+#' Generates a plot of boxplots of repeated log-likelihood BPF estimates 
+#' 
+#' Loglikelihood should be obtained via a previous BPF run, that estimates
+#' the SV model likelihood. These are passed, along with a sequence for the 
+#' autoregressive parameter phi, the number of simulations (for each individual)
+#' boxplot.
+#'
+#' @param out_log_like a matrix of dimension \code{length(par_seq_phi)} (rows)
+#'   times \code{num_simul}
+#' @param par_seq_phi parameter sequence for phi parameter for which a 
+#'   log-likelihood estimate is computed
+#' @param num_simul number of BPF runs per element of par_seq_phi
+#'
+#' @return invisible return; pure side effect of a boxplot generation
+#' @export
+plot_boxplot_loglike_estimates <- function(out_log_like,
+                                           par_seq_phi,
+                                           num_simul) {
+  par_col   <- as.character(rep(par_seq_phi, times = num_simul))
+  llike_col <- as.vector(out_log_like)
+  data_boxplots <- data.frame(par_col, llike_col)
+  
+  names(data_boxplots) <- c("parameter", "loglike_value")
+  x_expression <- expression(paste("Parameter values for ", phi))
+  
+  p <- ggplot2::ggplot(data_boxplots,
+                       ggplot2::aes(x = .data$parameter,
+                                    y = .data$loglike_value)) +
+    ggplot2::geom_boxplot(varwidth = TRUE,
+                          outlier.colour = "red",
+                          outlier.shape = 1) +
+    ggplot2::scale_x_discrete(name =  x_expression) +
+    ggplot2::scale_y_continuous(name = "Log-likelihood values") +
+    ggplot2::geom_jitter(width = 0.2)
+  plot(p)
+  return(invisible(NULL))
+}
