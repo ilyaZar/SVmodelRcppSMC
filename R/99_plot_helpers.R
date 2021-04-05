@@ -1,16 +1,15 @@
 #' Helper function for plotting PMMH and PGAS estimation results
 #'
-#' @param output_pmmh output object as provided by the pmmh estimatio functions
+#' @param output_pmcmc output object as provided by the pmmh estimatio functions
 #' @param burnin burnin period
 #' @param true_vals defaults to NULL e.g. when a real dataset is used; for simulated data
 #'   can be set to true parameter values
 #'
 #' @return invisible return; function called for plot side effects
 #' @export
-plot_pmmh_output <- function(output_pmmh,
-                             burnin,
-                             true_vals = NULL,
-                             plot_type = "ilya") {
+plot_pmcmc_output <- function(output_pmcmc,
+                              burnin,
+                              true_vals = NULL) {
   if (!is.null(true_vals)) {
     out_type_simulation = TRUE
     sigma_x_true <- true_vals[1]
@@ -18,9 +17,9 @@ plot_pmmh_output <- function(output_pmmh,
   } else {
     out_type_simulation = FALSE
   }
-  MM <- length(output_pmmh[[1]])
-  samples_sigma_x <- output_pmmh$samples_sigma_x
-  samples_beta_y  <- output_pmmh$samples_beta_y
+  MM <- length(output_pmcmc[[1]])
+  samples_sigma_x <- output_pmcmc$samples_sigma_x
+  samples_beta_y  <- output_pmcmc$samples_beta_y
   post_mean_sig_x <- mean(samples_sigma_x[burnin:MM])
   post_mean_bet_y <- mean(samples_beta_y[burnin:MM])
   

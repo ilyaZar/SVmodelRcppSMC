@@ -176,7 +176,7 @@ void SVmodelPMMH_move::pfInitialise(double& X,
                                     smc::nullParams& param)
 {
     X = R::rnorm(0.0, sqrt(5.0));
-    double sd = theta_prop.beta_y * exp(0.5 * X);
+    double sd = std::pow(theta_prop.beta_y, 0.5) * exp(0.5 * X);
     logweight = R::dnorm(y(0), 0.0, sd,TRUE);
 }
 //' The proposal function.
@@ -194,8 +194,9 @@ void SVmodelPMMH_move::pfMove(long lTime,
                               double& logweight,
                               smc::nullParams& param)
 {
-    X = theta_prop.phi_x * X + R::rnorm(0.0, theta_prop.sigma_x);
-    double sd = theta_prop.beta_y * exp(0.5 * X);
+    X  = theta_prop.phi_x * X;
+    X += R::rnorm(0.0, std::pow(theta_prop.sigma_x, 0.5));
+    double sd = std::pow(theta_prop.beta_y, 0.5) * exp(0.5 * X);
     logweight += R::dnorm(y(lTime), 0.0, sd, TRUE);
 }
 }
