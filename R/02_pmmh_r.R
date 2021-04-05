@@ -43,9 +43,7 @@ bpf_pmmh <- function(NN, yt, phi_x, sigma_x, beta_y) {
 #' @param num_particles number of particles
 #' @param rw_vcm_prop variance-covariance matrix of the RW-MH proposal
 #' @param y measurements
-#' @param phi_x_init initial value for phi parameter
-#' @param sig_x_init initial value for sigma parameter
-#' @param beta_y_init initial value for beta parameter
+#' @param starting_vals vector of starting values for phi, sigma_x, and beta_y
 #' @param num_iter number of PMMH iterations
 #'
 #' @return a list of parameter samples of for sigma-y and beta-y
@@ -53,10 +51,13 @@ bpf_pmmh <- function(NN, yt, phi_x, sigma_x, beta_y) {
 pmmh_sv <- function(num_particles,
                     rw_vcm_prop,
                     y,
-                    phi_x_init,
-                    sig_x_init,
-                    beta_y_init,
-                    num_iter) {
+                    starting_vals,
+                    num_iter,
+                    num_progress_outputs = 10) {
+  progress_intervall_num  <- round(num_iter / num_progress_outputs)
+  phi_x_init  <- starting_vals[1]
+  sig_x_init  <- starting_vals[2]
+  beta_y_init <- starting_vals[3]
   # Bookkeeping
   ll      <- 0
   llp     <- 0
@@ -64,14 +65,14 @@ pmmh_sv <- function(num_particles,
   samples <- matrix(0, nrow = num_iter, ncol = 2)
   accepts <- numeric(num_iter)
   # Initilaize by PF pre-run:
-  samples[1, 1] <- sig_x_init^2
-  samples[1, 2] <- beta_y_init^2
-
+  samples[1, 1] <- sig_x_init
+  samples[1, 2] <- beta_y_init
+  
   out_bpf         <- bpf_pmmh(NN = num_particles,
                               yt = y,
                               phi_x = phi_x_init,
-                              sigma_x = sqrt(samples[1, 1]),
-                              beta_y  = sqrt(samples[1, 2]))
+                              sigma_x = samples[1, 1],
+                              beta_y  = samples[1, 2])
   ll <- out_bpf$loglik
   # Iteration of PMH:
   for (m in 2:num_iter) {
@@ -81,10 +82,10 @@ pmmh_sv <- function(num_particles,
       # Compute acceptance probability
       out_bpf <- bpf_pmmh(NN = num_particles,
                           yt = y, phi_x = phi_x_init,
-                          sigma_x = sqrt(samples_prop[1]),
-                          beta_y  = sqrt(samples_prop[2]))
+                          sigma_x = samples_prop[1],
+                          beta_y  = samples_prop[2])
       llp <- out_bpf$loglik
-
+      
       prio_ratio_sigma <- (-dgamma(samples_prop[1],
                                    shape = 0.01,
                                    rate = 0.01,
@@ -116,18 +117,21 @@ pmmh_sv <- function(num_particles,
       samples[m, ] <- samples[m - 1, ]
       accepts[m]   <- 0
     }
-    cat(sprintf("########################\n"))
-    cat(sprintf(" Iteration: %d of : %d completed.\n \n",
-                m, num_iter))
-    # cat(sprintf(" Current state of the Markov chain:       %.4f %.4f %.4f \n",
-    #             th[kk, 1], th[kk, 2], th[kk, 3]))
-    # cat(sprintf(" Proposed next state of the Markov chain: %.4f %.4f %.4f \n",
-    #             thp[kk, 1], thp[kk, 2], thp[kk, 3]))
-    cat(sprintf(" Current posterior mean:                  %.4f %.4f  \n",
-                mean(samples[0:m, 1]), mean(samples[0:m, 2])))
-    cat(sprintf(" Current acceptance rate:                 %.4f \n",
-                mean(accepts[0:m])))
-    cat(sprintf("########################\n"))
+    if (m %% progress_intervall_num == 0) {
+      cat(sprintf("########################\n"))
+      cat(sprintf(" Iteration: %d of : %d completed.\n \n",
+                  m, num_iter))
+      # cat(sprintf(" Current state of the Markov chain:       %.4f %.4f %.4f \n",
+      #             th[kk, 1], th[kk, 2], th[kk, 3]))
+      # cat(sprintf(" Proposed next state of the Markov chain: %.4f %.4f %.4f \n",
+      #             thp[kk, 1], thp[kk, 2], thp[kk, 3]))
+      cat(sprintf(" Current posterior mean:                  %.4f %.4f  \n",
+                  mean(samples[0:m, 1]), mean(samples[0:m, 2])))
+      cat(sprintf(" Current acceptance rate:                 %.4f \n",
+                  mean(accepts[0:m])))
+      cat(sprintf("########################\n"))
+    }
   }
-  return(list(par_out_pmmh = samples))
+  return(list(samples_sigma_x = samples[, 1],
+              samples_beta_y  = samples[, 2]))
 }

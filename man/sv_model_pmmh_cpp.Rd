@@ -2,21 +2,37 @@
 % Please edit documentation in R/RcppExports.R
 \name{sv_model_pmmh_cpp}
 \alias{sv_model_pmmh_cpp}
-\title{Implementing PMMH for the toy SV model}
+\title{Implementing PMMH for the toy SV model.}
 \usage{
-sv_model_pmmh_cpp(data, lNumber, lMCMCits)
+sv_model_pmmh_cpp(
+  measurements,
+  lNumber,
+  lMCMCits,
+  starting_vals,
+  rw_mh_var,
+  num_progress_outputs = 10L
+)
 }
 \arguments{
-\item{data}{arma::vec providing the measurements (or y or data)}
+\item{measurements}{arma::vec providing the measurements (or y or measurements)}
 
 \item{lNumber}{number of particles}
 
 \item{lMCMCits}{number of PMMH iterations}
+
+\item{starting_vals}{arma::vec giving the three starting values for phi_x,
+sigma_x and beta_y}
+
+\item{rw_mh_var}{standard deviations for the RW-MH proposal step}
+
+\item{num_progress_outputs}{int giving the number of progress outputs i.e.
+if set to 10, then progress output occurs for every additional 10% of 
+completion}
 }
 \value{
-Rcpp::DataFrame containing the results: parameter samples and
-  log-prior and log-likelihoood estimates
+Rcpp::List containing the results: parameter samples (sigma_x, 
+  beta_y) and log-prior and log-likelihoood estimates
 }
 \description{
-the main cpp-function powering the R wrapper
+The main cpp-function powering the R wrapper.
 }

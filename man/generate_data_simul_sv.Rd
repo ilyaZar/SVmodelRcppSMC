@@ -4,14 +4,14 @@
 \alias{generate_data_simul_sv}
 \title{Helper function simulating from the toy SV model}
 \usage{
-generate_data_simul_sv(TT, phi_x, sigma_y, beta_y, init_state_x0)
+generate_data_simul_sv(TT, phi_x, sigma_x, beta_y, init_state_x0)
 }
 \arguments{
 \item{TT}{number of time periods}
 
 \item{phi_x}{phi parameter of state process}
 
-\item{sigma_y}{sigma parameter of measurements y}
+\item{sigma_x}{sigma parameter of measurements y}
 
 \item{beta_y}{beta parameter of measurements}
 

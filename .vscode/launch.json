@@ -11,7 +11,7 @@
             "debugMode": "workspace",
             "workingDirectory": "${workspaceFolder}",
             "allowGlobalDebugging": true,
-            "debuggedPackages": ["SCmodelExamples"]
+            "debuggedPackages": ["SVmodelExamples"]
         },
         {
             "type": "R-Debugger",
@@ -21,7 +21,7 @@
             "workingDirectory": "${workspaceFolder}",
             "file": "${file}",
             "allowGlobalDebugging": true,
-            "debuggedPackages": ["SCmodelExamples"]
+            "debuggedPackages": ["SVmodelExamples"]
         },
         {
             "type": "R-Debugger",
@@ -32,14 +32,14 @@
             "file": "${file}",
             "mainFunction": "main",
             "allowGlobalDebugging": false,
-            "debuggedPackages": ["SCmodelExamples"]
+            "debuggedPackages": ["SVmodelExamples"]
         },
         {
             "type": "R-Debugger",
             "request": "attach",
             "name": "Attach to R process",
             "splitOverwrittenOutput": true,
-            "debuggedPackages": ["SCmodelExamples"]
+            "debuggedPackages": ["SVmodelExamples"]
         }
     ]
 }

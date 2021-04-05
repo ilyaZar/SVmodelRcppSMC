@@ -1,7 +1,49 @@
 [
     {
+        "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/02_sv_model_pmmh.cpp",
+        "file_last_write": 1617631913.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sv_model_pmmh_cpp#$@N@arma@S@Col>#d#l#l#S0_#S0_#1I#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sv_model_pmmh_cpp(arma::vec, unsigned long, unsigned long, arma::vec, arma::vec, const int)",
+                "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/02_sv_model_pmmh.cpp",
+                "line": 32,
+                "column": 17
+            },
+            {
+                "usr": "c:@N@SVmodelPMMH@F@get_logprior_param#&1$@N@SVmodelPMMH@S@parameters#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "get_logprior_param(const SVmodelPMMH::parameters &)",
+                "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/02_sv_model_pmmh.cpp",
+                "line": 157,
+                "column": 8
+            },
+            {
+                "usr": "c:@N@SVmodelPMMH@S@SVmodelPMMH_move@F@pfInitialise#&d#S0_#&$@N@smc@S@nullParams#",
+                "kind": 7,
+                "parent_name": "SVmodelPMMH_move",
+                "name": "pfInitialise(double &, double &, smc::nullParams &)",
+                "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/02_sv_model_pmmh.cpp",
+                "line": 174,
+                "column": 24
+            },
+            {
+                "usr": "c:@N@SVmodelPMMH@S@SVmodelPMMH_move@F@pfMove#L#&d#S0_#&$@N@smc@S@nullParams#",
+                "kind": 7,
+                "parent_name": "SVmodelPMMH_move",
+                "name": "pfMove(long, double &, double &, smc::nullParams &)",
+                "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/02_sv_model_pmmh.cpp",
+                "line": 192,
+                "column": 24
+            }
+        ]
+    },
+    {
         "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/SVmodelPMMH.h",
-        "file_last_write": 1617553095.0,
+        "file_last_write": 1617621126.0,
         "definitions": [
             {
                 "usr": "c:@N@SVmodelPMMH@S@parameters",
@@ -9,7 +51,7 @@
                 "parent_name": "",
                 "name": "parameters",
                 "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/SVmodelPMMH.h",
-                "line": 28,
+                "line": 7,
                 "column": 11
             },
             {
@@ -18,7 +60,7 @@
                 "parent_name": "",
                 "name": "SVmodelPMMH_move",
                 "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelExamples/src/SVmodelPMMH.h",
-                "line": 38,
+                "line": 12,
                 "column": 11
             }
         ]

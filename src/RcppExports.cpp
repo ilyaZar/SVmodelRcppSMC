@@ -8,21 +8,24 @@
 using namespace Rcpp;
 
 // sv_model_pmmh_cpp
-Rcpp::DataFrame sv_model_pmmh_cpp(arma::vec data, unsigned long lNumber, unsigned long lMCMCits);
-RcppExport SEXP _SVmodelExamples_sv_model_pmmh_cpp(SEXP dataSEXP, SEXP lNumberSEXP, SEXP lMCMCitsSEXP) {
+Rcpp::DataFrame sv_model_pmmh_cpp(arma::vec measurements, unsigned long lNumber, unsigned long lMCMCits, arma::vec starting_vals, arma::vec rw_mh_var, const int num_progress_outputs);
+RcppExport SEXP _SVmodelExamples_sv_model_pmmh_cpp(SEXP measurementsSEXP, SEXP lNumberSEXP, SEXP lMCMCitsSEXP, SEXP starting_valsSEXP, SEXP rw_mh_varSEXP, SEXP num_progress_outputsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type measurements(measurementsSEXP);
     Rcpp::traits::input_parameter< unsigned long >::type lNumber(lNumberSEXP);
     Rcpp::traits::input_parameter< unsigned long >::type lMCMCits(lMCMCitsSEXP);
-    rcpp_result_gen = Rcpp::wrap(sv_model_pmmh_cpp(data, lNumber, lMCMCits));
+    Rcpp::traits::input_parameter< arma::vec >::type starting_vals(starting_valsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type rw_mh_var(rw_mh_varSEXP);
+    Rcpp::traits::input_parameter< const int >::type num_progress_outputs(num_progress_outputsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sv_model_pmmh_cpp(measurements, lNumber, lMCMCits, starting_vals, rw_mh_var, num_progress_outputs));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SVmodelExamples_sv_model_pmmh_cpp", (DL_FUNC) &_SVmodelExamples_sv_model_pmmh_cpp, 3},
+    {"_SVmodelExamples_sv_model_pmmh_cpp", (DL_FUNC) &_SVmodelExamples_sv_model_pmmh_cpp, 6},
     {NULL, NULL, 0}
 };
 

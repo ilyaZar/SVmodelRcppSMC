@@ -8,10 +8,9 @@ pmmh_sv(
   num_particles,
   rw_vcm_prop,
   y,
-  phi_x_init,
-  sig_x_init,
-  beta_y_init,
-  num_iter
+  starting_vals,
+  num_iter,
+  num_progress_outputs = 10
 )
 }
 \arguments{
@@ -21,11 +20,7 @@ pmmh_sv(
 
 \item{y}{measurements}
 
-\item{phi_x_init}{initial value for phi parameter}
-
-\item{sig_x_init}{initial value for sigma parameter}
-
-\item{beta_y_init}{initial value for beta parameter}
+\item{starting_vals}{vector of starting values for phi, sigma_x, and beta_y}
 
 \item{num_iter}{number of PMMH iterations}
 }

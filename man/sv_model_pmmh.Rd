@@ -2,18 +2,25 @@
 % Please edit documentation in R/sv_model_pmmh.R
 \name{sv_model_pmmh}
 \alias{sv_model_pmmh}
-\title{Runs PMMH procedure on the simulated data example}
+\title{Runs PMMH procedure for the toy SV model}
 \usage{
 sv_model_pmmh(
   data,
-  particles = 5000,
-  iterations = 10000,
-  burnin = 0,
-  plot = FALSE
+  starting_vals,
+  rw_mh_sd,
+  particles = 2000,
+  iterations = 5000,
+  burnin = round(iterations/2, digits = 0),
+  num_progress_outputs = 10
 )
 }
 \arguments{
 \item{data}{measurements or y}
+
+\item{starting_vals}{starting values as a vector in the follwoing order
+phi_x, sigma_x, and beta_y}
+
+\item{rw_mh_sd}{a vector of two elements giving the standard deviations for the RW-MH step}
 
 \item{particles}{number of particles}
 
@@ -21,12 +28,13 @@ sv_model_pmmh(
 
 \item{burnin}{burnin period (number of samples to exclude)}
 
-\item{plot}{logical; if TRUE, a plot of the reslults will be returned}
+\item{num_progress_outputs}{int giving the number of progress outputs i.e.
+if set to 10, then progress output occurs for every additional 10% of 
+completion}
 }
 \value{
-invisibly returns PMMH output and, if plot = TRUE, a plot of the
- output
+returns PMMH output
 }
 \description{
-Runs PMMH procedure on the simulated data example
+Runs PMMH procedure for the toy SV model
 }
