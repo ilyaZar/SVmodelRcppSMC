@@ -31,11 +31,11 @@ sv_model_pmmh <- function(data,
         stop("Burn-in must be less than iterations!")
     }
 
-    res <- SVmodelExamples::sv_model_pmmh_cpp(as.matrix(data),
-                                              particles,
-                                              iterations,
-                                              starting_vals,
-                                              rw_mh_sd,
-                                              num_progress_outputs) 
+    res <- SVmodelRcppSMC::sv_model_pmmh_cpp(as.matrix(data),
+                                             particles,
+                                             iterations,
+                                             starting_vals,
+                                             rw_mh_sd,
+                                             num_progress_outputs) 
     return(res)
 }
