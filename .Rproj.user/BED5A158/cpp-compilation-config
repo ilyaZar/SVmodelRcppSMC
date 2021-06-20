@@ -11,12 +11,12 @@
         "-I/home/iz/Dropbox/libraries/R/4.0/Rcpp/include",
         "-I/home/iz/Dropbox/libraries/R/4.0/RcppArmadillo/include",
         "-I/home/iz/Dropbox/libraries/R/4.0/RcppSMC/include",
-        "-std=gnu++11",
+        "-std=gnu++14",
         "-I/usr/share/R/include",
         "-DNDEBUG",
         "-fpic"
     ],
     "pch": "RcppArmadillo",
     "is_cpp": true,
-    "hash": "15932685501617656583"
+    "hash": "15932685501623684276"
 }

@@ -47,3 +47,23 @@ sv_model_pmmh_cpp <- function(measurements, lNumber, lMCMCits, starting_vals, rw
     .Call(`_SVmodelRcppSMC_sv_model_pmmh_cpp`, measurements, lNumber, lMCMCits, starting_vals, rw_mh_var, num_progress_outputs)
 }
 
+#' Implementing PMMH for the toy SV model.
+#'
+#' The main cpp-function powering the R wrapper.
+#'
+#' @param measurements arma::vec providing the measurements (or y or
+#' measurements)
+#' @param lNumber number of particles
+#' @param starting_vals arma::vec giving the three starting values for phi_x,
+#'   sigma_x and beta_y
+#' @param resample_freq int giving the number of progress outputs i.e.
+#'   if set to 10, then progress output occurs for every additional 10% of 
+#'   completion
+#' @return Rcpp::List containing the results: parameter samples (sigma_x, 
+#'   beta_y) and log-prior and log-likelihoood estimates
+#'
+#' @export
+sv_model_al_tracking_impl <- function(measurements, starting_vals, lNumber, resample_freq = 0.5) {
+    .Call(`_SVmodelRcppSMC_sv_model_al_tracking_impl`, measurements, starting_vals, lNumber, resample_freq)
+}
+

@@ -7,6 +7,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // bpf_loglike_sv
 double bpf_loglike_sv(arma::vec measurements, unsigned long lNumber, arma::vec starting_vals);
 RcppExport SEXP _SVmodelRcppSMC_bpf_loglike_sv(SEXP measurementsSEXP, SEXP lNumberSEXP, SEXP starting_valsSEXP) {
@@ -36,10 +41,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sv_model_al_tracking_impl
+Rcpp::List sv_model_al_tracking_impl(arma::vec measurements, arma::vec starting_vals, unsigned long lNumber, const double resample_freq);
+RcppExport SEXP _SVmodelRcppSMC_sv_model_al_tracking_impl(SEXP measurementsSEXP, SEXP starting_valsSEXP, SEXP lNumberSEXP, SEXP resample_freqSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type measurements(measurementsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type starting_vals(starting_valsSEXP);
+    Rcpp::traits::input_parameter< unsigned long >::type lNumber(lNumberSEXP);
+    Rcpp::traits::input_parameter< const double >::type resample_freq(resample_freqSEXP);
+    rcpp_result_gen = Rcpp::wrap(sv_model_al_tracking_impl(measurements, starting_vals, lNumber, resample_freq));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_SVmodelRcppSMC_bpf_loglike_sv", (DL_FUNC) &_SVmodelRcppSMC_bpf_loglike_sv, 3},
     {"_SVmodelRcppSMC_sv_model_pmmh_cpp", (DL_FUNC) &_SVmodelRcppSMC_sv_model_pmmh_cpp, 6},
+    {"_SVmodelRcppSMC_sv_model_al_tracking_impl", (DL_FUNC) &_SVmodelRcppSMC_sv_model_al_tracking_impl, 4},
     {NULL, NULL, 0}
 };
 

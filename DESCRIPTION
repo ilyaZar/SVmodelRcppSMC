@@ -14,3 +14,4 @@ Imports:
     rlang
 LinkingTo: Rcpp, RcppArmadillo, RcppSMC
 RoxygenNote: 7.1.1
+Encoding: UTF-8
