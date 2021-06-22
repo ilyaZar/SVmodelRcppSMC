@@ -14,9 +14,12 @@ phi_x, sigma_x, and beta_y}
 
 \item{particles}{number of particles}
 
-\item{resample_freq}{int giving the number of progress outputs i.e.
-if set to 10, then progress output occurs for every additional 10% of 
-completion}
+\item{resample_freq}{frequency at which resampling is performed; if negative,
+then resampling is never performed; if between [0,1], then resampling is
+performed when  the ESS falls below that proportion of the number of
+particles and when it is greater than 1, resampling is carried out when the
+ESS falls below that value (note: if this parameter is larger than the
+total number of particles, then resampling will always be performed!)}
 }
 \value{
 returns PMMH output

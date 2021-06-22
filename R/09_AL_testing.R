@@ -4,9 +4,12 @@
 #' @param starting_vals starting values as a vector in the follwoing order
 #'   phi_x, sigma_x, and beta_y
 #' @param particles number of particles
-#' @param resample_freq int giving the number of progress outputs i.e.
-#'   if set to 10, then progress output occurs for every additional 10% of 
-#'   completion
+#' @param resample_freq frequency at which resampling is performed; if negative,
+#'   then resampling is never performed; if between [0,1], then resampling is
+#'   performed when  the ESS falls below that proportion of the number of
+#'   particles and when it is greater than 1, resampling is carried out when the
+#'   ESS falls below that value (note: if this parameter is larger than the
+#'   total number of particles, then resampling will always be performed!)
 #'
 #' @return returns PMMH output
 #' 
@@ -29,8 +32,8 @@ sv_model_al_tracking <- function(data,
   plot_al <- t(res[["ancestor_lines"]])
   matplot(plot_al, type = c("b"),pch = 1, col = 1:particles) #plot
   legend("topleft", legend = 1:particles, col=1:particles, pch=1)
-  title(main = "Particle ancestral lines",
+  title(main = "Particle ancestral lines (full genealogy)",
         xlab = "Iteration",
-        ylab = "Particle values (Genealogy)")
-  return(res)
+        ylab = "Particle values")
+  return(invisible(res))
 }
