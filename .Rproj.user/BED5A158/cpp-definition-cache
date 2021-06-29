@@ -40,13 +40,13 @@
     },
     {
         "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelRcppSMC/src/09_AL_testing.cpp",
-        "file_last_write": 1623752355.0,
+        "file_last_write": 1624430331.0,
         "definitions": [
             {
-                "usr": "c:@F@sv_model_al_tracking_impl#$@N@arma@S@Col>#d#S0_#l#1I#",
+                "usr": "c:@F@sv_model_al_tracking_impl#$@N@arma@S@Col>#d#S0_#l#1d#",
                 "kind": 6,
                 "parent_name": "",
-                "name": "sv_model_al_tracking_impl(arma::vec, arma::vec, unsigned long, const int)",
+                "name": "sv_model_al_tracking_impl(arma::vec, arma::vec, unsigned long, const double)",
                 "file": "/home/iz/Dropbox/projects/gsoc21/SVmodelRcppSMC/src/09_AL_testing.cpp",
                 "line": 27,
                 "column": 12

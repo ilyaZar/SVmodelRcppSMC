@@ -56,14 +56,18 @@ sv_model_pmmh_cpp <- function(measurements, lNumber, lMCMCits, starting_vals, rw
 #' @param lNumber number of particles
 #' @param starting_vals arma::vec giving the three starting values for phi_x,
 #'   sigma_x and beta_y
-#' @param resample_freq int giving the number of progress outputs i.e.
-#'   if set to 10, then progress output occurs for every additional 10% of 
-#'   completion
+#' @param resampleFreq  frequency at which resampling is performed; if
+#'   negative, then resampling is never performed; if between [0,1), then
+#'   resampling is performed when  the ESS falls below that proportion of the
+#'   number of particles and when it is greater than or equal to 1, resampling
+#'   is carried out when the ESS falls below that value (note: if this
+#'   parameter is larger than the total number of particles, then resampling
+#'   will always be performed!)
 #' @return Rcpp::List containing the results: parameter samples (sigma_x, 
 #'   beta_y) and log-prior and log-likelihoood estimates
 #'
 #' @export
-sv_model_al_tracking_impl <- function(measurements, starting_vals, lNumber, resample_freq = 0.5) {
-    .Call(`_SVmodelRcppSMC_sv_model_al_tracking_impl`, measurements, starting_vals, lNumber, resample_freq)
+sv_model_al_tracking_impl <- function(measurements, starting_vals, lNumber, resampleFreq = 0.5) {
+    .Call(`_SVmodelRcppSMC_sv_model_al_tracking_impl`, measurements, starting_vals, lNumber, resampleFreq)
 }
 

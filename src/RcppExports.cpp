@@ -42,16 +42,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // sv_model_al_tracking_impl
-Rcpp::List sv_model_al_tracking_impl(arma::vec measurements, arma::vec starting_vals, unsigned long lNumber, const double resample_freq);
-RcppExport SEXP _SVmodelRcppSMC_sv_model_al_tracking_impl(SEXP measurementsSEXP, SEXP starting_valsSEXP, SEXP lNumberSEXP, SEXP resample_freqSEXP) {
+Rcpp::List sv_model_al_tracking_impl(arma::vec measurements, arma::vec starting_vals, unsigned long lNumber, const double resampleFreq);
+RcppExport SEXP _SVmodelRcppSMC_sv_model_al_tracking_impl(SEXP measurementsSEXP, SEXP starting_valsSEXP, SEXP lNumberSEXP, SEXP resampleFreqSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec >::type measurements(measurementsSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type starting_vals(starting_valsSEXP);
     Rcpp::traits::input_parameter< unsigned long >::type lNumber(lNumberSEXP);
-    Rcpp::traits::input_parameter< const double >::type resample_freq(resample_freqSEXP);
-    rcpp_result_gen = Rcpp::wrap(sv_model_al_tracking_impl(measurements, starting_vals, lNumber, resample_freq));
+    Rcpp::traits::input_parameter< const double >::type resampleFreq(resampleFreqSEXP);
+    rcpp_result_gen = Rcpp::wrap(sv_model_al_tracking_impl(measurements, starting_vals, lNumber, resampleFreq));
     return rcpp_result_gen;
 END_RCPP
 }

@@ -12,9 +12,13 @@ using namespace ALtesting;
 //' @param lNumber number of particles
 //' @param starting_vals arma::vec giving the three starting values for phi_x,
 //'   sigma_x and beta_y
-//' @param resample_freq int giving the number of progress outputs i.e.
-//'   if set to 10, then progress output occurs for every additional 10% of 
-//'   completion
+//' @param resampleFreq  frequency at which resampling is performed; if
+//'   negative, then resampling is never performed; if between [0,1), then
+//'   resampling is performed when  the ESS falls below that proportion of the
+//'   number of particles and when it is greater than or equal to 1, resampling
+//'   is carried out when the ESS falls below that value (note: if this
+//'   parameter is larger than the total number of particles, then resampling
+//'   will always be performed!)
 //' @return Rcpp::List containing the results: parameter samples (sigma_x, 
 //'   beta_y) and log-prior and log-likelihoood estimates
 //'
@@ -23,7 +27,7 @@ using namespace ALtesting;
 Rcpp::List sv_model_al_tracking_impl(arma::vec measurements,
                                      arma::vec starting_vals,
                                      unsigned long lNumber,
-                                     const double resample_freq = 0.5) {
+                                     const double resampleFreq = 0.5) {
   // Set variables related to progress monitoring of the overall procedure:
   long lIterates = y_pmmh_simul.n_rows;
   // int progress_intervall_num = round(lIterates/num_progress_outputs);
@@ -43,7 +47,7 @@ Rcpp::List sv_model_al_tracking_impl(arma::vec measurements,
     smc::sampler<double,smc::nullParams> Sampler(lNumber,
                                                  HistoryType::AL,
                                                  my_move_al);
-    Sampler.SetResampleParams(ResampleType::MULTINOMIAL, resample_freq);
+    Sampler.SetResampleParams(ResampleType::MULTINOMIAL, resampleFreq);
     Sampler.Initialise();
     // Sampler.IterateUntil(lIterates - 1);
     for (unsigned int i = 0; i < lIterates; ++i) {
