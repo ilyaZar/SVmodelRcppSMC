@@ -8,7 +8,7 @@ sv_model_al_tracking_impl(
   measurements,
   starting_vals,
   lNumber,
-  resample_freq = 0.5
+  resampleFreq = 0.5
 )
 }
 \arguments{
@@ -20,9 +20,13 @@ sigma_x and beta_y}
 
 \item{lNumber}{number of particles}
 
-\item{resample_freq}{int giving the number of progress outputs i.e.
-if set to 10, then progress output occurs for every additional 10% of 
-completion}
+\item{resampleFreq}{frequency at which resampling is performed; if
+negative, then resampling is never performed; if between [0,1), then
+resampling is performed when  the ESS falls below that proportion of the
+number of particles and when it is greater than or equal to 1, resampling
+is carried out when the ESS falls below that value (note: if this
+parameter is larger than the total number of particles, then resampling
+will always be performed!)}
 }
 \value{
 Rcpp::List containing the results: parameter samples (sigma_x, 

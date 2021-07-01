@@ -47,6 +47,37 @@ sv_model_pmmh_cpp <- function(measurements, lNumber, lMCMCits, starting_vals, rw
     .Call(`_SVmodelRcppSMC_sv_model_pmmh_cpp`, measurements, lNumber, lMCMCits, starting_vals, rw_mh_var, num_progress_outputs)
 }
 
+#' A function to sample model parameters from full conditional Gibbs blocks.
+#'
+#' The model parameters are \code{sigmaX} and \code{betaY}, passed via a 
+#' parameter class. The prior is set to \code{IG(0.01,0.01)}
+#'
+#' @param proposal a constant reference to proposed values of the parameters
+#'
+#' @return a parameter class 
+NULL
+
+#' Implementing PG for the toy SV model.
+#'
+#' The main cpp-function powering the R wrapper.
+#'
+#' @param measurements arma::vec providing the measurements (or y or measurements)
+#' @param lNumber number of particles
+#' @param lMCMCits number of PG iterations
+#' @param initVals arma::vec giving the three starting values for phiX,
+#'   sigmaX and betaY
+#' @param initReferenceTrajectory standard deviations for the RW-MH proposal step
+#' @param num_progress_outputs int giving the number of progress outputs i.e.
+#'   if set to 10, then progress output occurs for every additional 10% of 
+#'   completion
+#' @return Rcpp::List containing the results: parameter samples (sigmaX, 
+#'   betaY) and log-prior and log-likelihoood estimates
+#'
+#' @export
+svmodelPGimpl <- function(measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, num_progress_outputs = 10L) {
+    .Call(`_SVmodelRcppSMC_svmodelPGimpl`, measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, num_progress_outputs)
+}
+
 #' Implementing PMMH for the toy SV model.
 #'
 #' The main cpp-function powering the R wrapper.

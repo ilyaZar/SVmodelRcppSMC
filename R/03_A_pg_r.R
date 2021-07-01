@@ -6,7 +6,7 @@ sample_gibbs_params <- function(y, x, param, a, b) {
   a_beta <- a + TT/2
   b_beta <- b + 0.5*sum(exp(-x[2:TT])*(y^2))
   bet_sq_x = 1/rgamma(1, a_beta, b_beta)
-  #
+
   sig_sq_x <- sqrt(sig_sq_x)
   bet_sq_x <- sqrt(bet_sq_x)
   return(c(sig_sq_x, bet_sq_x))
@@ -94,13 +94,13 @@ compute_as <- function(num_particles,
 #'
 #' @return 
 #' @export
-pg_sv <- function(y,
-                  num_particles, 
-                  starting_values,
-                  num_iter, 
-                  x_r_init,
-                  as_sampling,
-                  num_progress_outputs = 10) {
+pg_sv_r <- function(y,
+                    num_particles, 
+                    starting_values,
+                    num_iter, 
+                    x_r_init,
+                    as_sampling,
+                    num_progress_outputs = 10) {
   progress_intervall_num  <- round(num_iter / num_progress_outputs)
 
   TT <- length(y)
@@ -152,6 +152,6 @@ pg_sv <- function(y,
       cat(sprintf("########################\n"))
     }
   }
-  return(list(samples_sigma_x = sig_sq_x,
-              samples_beta_y  = bet_sq_x))
+  return(list(samplesSigmaX = sig_sq_x,
+              samplesBetaY  = bet_sq_x))
 }

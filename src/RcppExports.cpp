@@ -41,6 +41,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// svmodelPGimpl
+Rcpp::List svmodelPGimpl(arma::vec measurements, unsigned long lNumber, unsigned long lMCMCits, arma::vec initVals, arma::vec initReferenceTrajectory, const int num_progress_outputs);
+RcppExport SEXP _SVmodelRcppSMC_svmodelPGimpl(SEXP measurementsSEXP, SEXP lNumberSEXP, SEXP lMCMCitsSEXP, SEXP initValsSEXP, SEXP initReferenceTrajectorySEXP, SEXP num_progress_outputsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type measurements(measurementsSEXP);
+    Rcpp::traits::input_parameter< unsigned long >::type lNumber(lNumberSEXP);
+    Rcpp::traits::input_parameter< unsigned long >::type lMCMCits(lMCMCitsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type initVals(initValsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type initReferenceTrajectory(initReferenceTrajectorySEXP);
+    Rcpp::traits::input_parameter< const int >::type num_progress_outputs(num_progress_outputsSEXP);
+    rcpp_result_gen = Rcpp::wrap(svmodelPGimpl(measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, num_progress_outputs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sv_model_al_tracking_impl
 Rcpp::List sv_model_al_tracking_impl(arma::vec measurements, arma::vec starting_vals, unsigned long lNumber, const double resampleFreq);
 RcppExport SEXP _SVmodelRcppSMC_sv_model_al_tracking_impl(SEXP measurementsSEXP, SEXP starting_valsSEXP, SEXP lNumberSEXP, SEXP resampleFreqSEXP) {
@@ -59,6 +75,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_SVmodelRcppSMC_bpf_loglike_sv", (DL_FUNC) &_SVmodelRcppSMC_bpf_loglike_sv, 3},
     {"_SVmodelRcppSMC_sv_model_pmmh_cpp", (DL_FUNC) &_SVmodelRcppSMC_sv_model_pmmh_cpp, 6},
+    {"_SVmodelRcppSMC_svmodelPGimpl", (DL_FUNC) &_SVmodelRcppSMC_svmodelPGimpl, 6},
     {"_SVmodelRcppSMC_sv_model_al_tracking_impl", (DL_FUNC) &_SVmodelRcppSMC_sv_model_al_tracking_impl, 4},
     {NULL, NULL, 0}
 };

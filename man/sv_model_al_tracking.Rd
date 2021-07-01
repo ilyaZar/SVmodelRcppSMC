@@ -4,7 +4,7 @@
 \alias{sv_model_al_tracking}
 \title{Runs PMMH procedure for the toy SV model}
 \usage{
-sv_model_al_tracking(data, starting_vals, particles = 10, resample_freq = 10)
+sv_model_al_tracking(data, starting_vals, particles = 10, resampleFreq = 10)
 }
 \arguments{
 \item{data}{measurements or y}
@@ -14,12 +14,13 @@ phi_x, sigma_x, and beta_y}
 
 \item{particles}{number of particles}
 
-\item{resample_freq}{frequency at which resampling is performed; if negative,
-then resampling is never performed; if between [0,1], then resampling is
+\item{resampleFreq}{frequency at which resampling is performed; if negative,
+then resampling is never performed; if between [0,1), then resampling is
 performed when  the ESS falls below that proportion of the number of
-particles and when it is greater than 1, resampling is carried out when the
-ESS falls below that value (note: if this parameter is larger than the
-total number of particles, then resampling will always be performed!)}
+particles and when it is greater than or equal to 1, resampling is carried
+out when the ESS falls below that value (note: if this parameter is larger
+than the total number of particles, then resampling will always be
+performed!)}
 }
 \value{
 returns PMMH output
