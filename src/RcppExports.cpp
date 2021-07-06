@@ -7,11 +7,6 @@
 
 using namespace Rcpp;
 
-#ifdef RCPP_USE_GLOBAL_ROSTREAM
-Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
-Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
-#endif
-
 // bpf_loglike_sv
 double bpf_loglike_sv(arma::vec measurements, unsigned long lNumber, arma::vec starting_vals);
 RcppExport SEXP _SVmodelRcppSMC_bpf_loglike_sv(SEXP measurementsSEXP, SEXP lNumberSEXP, SEXP starting_valsSEXP) {
