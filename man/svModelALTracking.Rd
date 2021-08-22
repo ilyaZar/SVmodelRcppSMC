@@ -4,7 +4,13 @@
 \alias{svModelALTracking}
 \title{Runs PMMH procedure for the toy SV model}
 \usage{
-svModelALTracking(data, initVals, particles = 10, resampleFreq = 10)
+svModelALTracking(
+  data,
+  initVals,
+  particles = 8,
+  resampleFreq = 0.5,
+  printALinfo = FALSE
+)
 }
 \arguments{
 \item{data}{measurements or y}

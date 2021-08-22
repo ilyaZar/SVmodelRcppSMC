@@ -99,11 +99,13 @@ svModelPGimpl <- function(measurements, lNumber, lMCMCits, initVals, initReferen
 #'   is carried out when the ESS falls below that value (note: if this
 #'   parameter is larger than the total number of particles, then resampling
 #'   will always be performed!)
+#' @printALinfo boolean; if FALSE, no information about the ancestral lines is
+#'   printed to the screen and just the plot is returned
 #' @return Rcpp::List containing the results: parameter samples (sigmaX, 
 #'   betaY) and log-prior and log-likelihoood estimates
 #'
 #' @export
-svModelALtrackingImp <- function(measurements, initVals, lNumber, resampleFreq = 0.5) {
-    .Call(`_SVmodelRcppSMC_svModelALtrackingImp`, measurements, initVals, lNumber, resampleFreq)
+svModelALtrackingImp <- function(measurements, initVals, lNumber, resampleFreq = 0.5, printALinfo = FALSE) {
+    .Call(`_SVmodelRcppSMC_svModelALtrackingImp`, measurements, initVals, lNumber, resampleFreq, printALinfo)
 }
 

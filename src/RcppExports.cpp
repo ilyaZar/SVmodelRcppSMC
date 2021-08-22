@@ -58,8 +58,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // svModelALtrackingImp
-Rcpp::List svModelALtrackingImp(arma::vec measurements, arma::vec initVals, unsigned long lNumber, const double resampleFreq);
-RcppExport SEXP _SVmodelRcppSMC_svModelALtrackingImp(SEXP measurementsSEXP, SEXP initValsSEXP, SEXP lNumberSEXP, SEXP resampleFreqSEXP) {
+Rcpp::List svModelALtrackingImp(arma::vec measurements, arma::vec initVals, unsigned long lNumber, const double resampleFreq, bool printALinfo);
+RcppExport SEXP _SVmodelRcppSMC_svModelALtrackingImp(SEXP measurementsSEXP, SEXP initValsSEXP, SEXP lNumberSEXP, SEXP resampleFreqSEXP, SEXP printALinfoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +67,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type initVals(initValsSEXP);
     Rcpp::traits::input_parameter< unsigned long >::type lNumber(lNumberSEXP);
     Rcpp::traits::input_parameter< const double >::type resampleFreq(resampleFreqSEXP);
-    rcpp_result_gen = Rcpp::wrap(svModelALtrackingImp(measurements, initVals, lNumber, resampleFreq));
+    Rcpp::traits::input_parameter< bool >::type printALinfo(printALinfoSEXP);
+    rcpp_result_gen = Rcpp::wrap(svModelALtrackingImp(measurements, initVals, lNumber, resampleFreq, printALinfo));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -76,7 +77,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SVmodelRcppSMC_svModelBpfLogLike", (DL_FUNC) &_SVmodelRcppSMC_svModelBpfLogLike, 3},
     {"_SVmodelRcppSMC_svModelPMMHimpl", (DL_FUNC) &_SVmodelRcppSMC_svModelPMMHimpl, 6},
     {"_SVmodelRcppSMC_svModelPGimpl", (DL_FUNC) &_SVmodelRcppSMC_svModelPGimpl, 6},
-    {"_SVmodelRcppSMC_svModelALtrackingImp", (DL_FUNC) &_SVmodelRcppSMC_svModelALtrackingImp, 4},
+    {"_SVmodelRcppSMC_svModelALtrackingImp", (DL_FUNC) &_SVmodelRcppSMC_svModelALtrackingImp, 5},
     {NULL, NULL, 0}
 };
 

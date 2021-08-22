@@ -10,7 +10,7 @@ svModelPGr(
   startingValues,
   numIter,
   xRinit,
-  asSampling,
+  asSampling = FALSE,
   numProgressOutputs = 10
 )
 }

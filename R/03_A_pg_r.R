@@ -11,7 +11,7 @@ sampleGibbsParams <- function(y, x, param, a, b) {
   betSqX <- sqrt(betSqX)
   return(c(sigSqX, betSqX))
 }
-bpfPG <- function(N, yt, phiX, sigmaX, betaY, xR, asSampling) {
+bpfPG <- function(N, yt, phiX, sigmaX, betaY, xR, asSampling = FALSE) {
   # Bookkeeping:
   TT      <- length(yt) + 1
   yt     <- c(NA, yt)
@@ -103,7 +103,7 @@ svModelPGr <- function(y,
                        startingValues,
                        numIter, 
                        xRinit,
-                       asSampling,
+                       asSampling = FALSE,
                        numProgressOutputs = 10) {
   progressIntervallNum  <- round(numIter / numProgressOutputs)
 
@@ -153,7 +153,6 @@ svModelPGr <- function(y,
                   m, numIter))
       cat(sprintf(" Current posterior mean:                  %.4f %.4f  \n",
                   mean(sigSqX[0:m]), mean(betSqX[0:m])))
-      cat(sprintf("########################\n"))
     }
   }
   return(list(samplesSigmaX = sigSqX,

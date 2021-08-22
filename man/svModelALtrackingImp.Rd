@@ -4,7 +4,13 @@
 \alias{svModelALtrackingImp}
 \title{Implementing PMMH for the toy SV model.}
 \usage{
-svModelALtrackingImp(measurements, initVals, lNumber, resampleFreq = 0.5)
+svModelALtrackingImp(
+  measurements,
+  initVals,
+  lNumber,
+  resampleFreq = 0.5,
+  printALinfo = FALSE
+)
 }
 \arguments{
 \item{measurements}{arma::vec providing the measurements (or y or

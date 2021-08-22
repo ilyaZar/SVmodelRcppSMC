@@ -25,7 +25,7 @@ public:
 parameters thetaProp;
 smc::moveset<double, smc::nullParams>* my_move_al;
 
-arma::vec yPMMHsimul;
+arma::vec ySVsimul;
 
 //' A function to initialize a particle
 //' 
@@ -42,7 +42,7 @@ void ALtracking_move::pfInitialise(double& X,
 {
   X = R::rnorm(0.0, sqrt(5.0));
   double sd = std::pow(thetaProp.betaY, 0.5) * exp(0.5 * X);
-  logweight = R::dnorm(yPMMHsimul(0), 0.0, sd,TRUE);
+  logweight = R::dnorm(ySVsimul(0), 0.0, sd,TRUE);
 }
 //' The proposal function.
 //' 
@@ -62,6 +62,6 @@ void ALtracking_move::pfMove(long lTime,
   X  = thetaProp.phiX * X;
   X += R::rnorm(0.0, std::pow(thetaProp.sigmaX, 0.5));
   double sd = std::pow(thetaProp.betaY, 0.5) * exp(0.5 * X);
-  logweight += R::dnorm(yPMMHsimul(lTime), 0.0, sd, TRUE);
+  logweight += R::dnorm(ySVsimul(lTime), 0.0, sd, TRUE);
 }
 }
