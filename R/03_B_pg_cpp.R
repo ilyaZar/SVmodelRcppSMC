@@ -1,25 +1,24 @@
 #' Runs PG procedure for the toy SV model
 #'
 #' @param data measurements or y
-#' @param startingVals starting values as a vector in the follwoing order
-#'   phi_x, sigma_x, and beta_y
-#' @param startingTrajectory
+#' @param startingVals starting values as a vector in the following order
+#'   phiX, sigmaX, and betaY
+#' @param startingTrajectory initial reference trajectory condition for the
+#'   conditional SMC part of the PG algorith
 #' @param particles number of particles
 #' @param iterations number of PMCMC iterations
-#' @param burnin burnin period (number of samples to exclude)
 #' @param numProgressOutputs int giving the number of progress outputs i.e.
 #'   if set to 10, then progress output occurs for every additional 10% of 
 #'   completion
 #'
-#' @return returns PG output
+#' @return Rcpp::List containing the results: parameter samples (sigmaX, betaY)
 #' 
 #' @export
-svmodelPG <- function(data,
+svModelPG <- function(data,
                       startingVals,
                       startingTrajectory,
                       particles = 2000,
                       iterations= 5000,
-                      burnin = round(iterations / 2, digits = 0),
                       numProgressOutputs = 10) {
     if (missing(data)) {
          msgErr <- paste0("'data' argument is missing: ",
@@ -27,11 +26,8 @@ svmodelPG <- function(data,
                           "'SVmodelPG::generateDataSimulSv()'")
          stop(msgErr)
     }
-    if (burnin >= iterations) {
-        stop("Burn-in must be less than iterations!")
-    }
 
-    res <- SVmodelRcppSMC::svmodelPGimpl(as.matrix(data),
+    res <- SVmodelRcppSMC::svModelPGimpl(as.matrix(data),
                                          particles,
                                          iterations,
                                          startingVals,

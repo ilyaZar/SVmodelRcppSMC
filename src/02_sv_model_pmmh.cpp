@@ -1,7 +1,7 @@
 #include "SVmodelPMMH.h"
 
 namespace SVmodelPMMH {
-    const double resample_freq = 0.5; // resampling frequency
+    const double resampleFreq = 0.5; // resampling frequency
 }
 
 using namespace std;
@@ -14,124 +14,124 @@ using namespace SVmodelPMMH;
 //' @param measurements arma::vec providing the measurements (or y or measurements)
 //' @param lNumber number of particles
 //' @param lMCMCits number of PMMH iterations
-//' @param starting_vals arma::vec giving the three starting values for phi_x,
-//'   sigma_x and beta_y
-//' @param rw_mh_var standard deviations for the RW-MH proposal step
-//' @param num_progress_outputs int giving the number of progress outputs i.e.
+//' @param initVals arma::vec giving the three starting values for phiX,
+//'   sigmaX and betaY
+//' @param rwMHvar standard deviations for the RW-MH proposal step
+//' @param numProgressOutputs int giving the number of progress outputs i.e.
 //'   if set to 10, then progress output occurs for every additional 10% of 
 //'   completion
-//' @return Rcpp::List containing the results: parameter samples (sigma_x, 
-//'   beta_y) and log-prior and log-likelihoood estimates
+//' @return Rcpp::List containing the results: parameter samples (sigmaX, 
+//'   betaY) and log-prior and log-likelihoood estimates
 //'
 //' @export
 // [[Rcpp::export]]
-Rcpp::List sv_model_pmmh_cpp(arma::vec measurements,
+Rcpp::List svModelPMMHimpl(arma::vec measurements,
                              unsigned long lNumber,
                              unsigned long lMCMCits,
-                             arma::vec starting_vals,
-                             arma::vec rw_mh_var,
-                             const int num_progress_outputs = 10) {
+                             arma::vec initVals,
+                             arma::vec rwMHvar,
+                             const int numProgressOutputs = 10) {
     // Initializing data containers
-    arma::vec sigma_x  = arma::zeros(lMCMCits+1);
-    arma::vec beta_y   = arma::zeros(lMCMCits+1);
+    arma::vec sigmaX  = arma::zeros(lMCMCits+1);
+    arma::vec betaY   = arma::zeros(lMCMCits+1);
     arma::vec loglike  = arma::zeros(lMCMCits+1);
     arma::vec logprior = arma::zeros(lMCMCits+1);
     
     // Some other housekeeping
     // General:
-    y_pmmh_simul = measurements;
-    long lIterates = y_pmmh_simul.n_rows;
+    yPMMHsimul = measurements;
+    long lIterates = yPMMHsimul.n_rows;
     // Set starting values:
-    theta_prop.phi_x   = starting_vals(0);
-    theta_prop.sigma_x = starting_vals(1);
-    theta_prop.beta_y  = starting_vals(2);
-    sigma_x(0) = theta_prop.sigma_x;
-    beta_y(0)  = theta_prop.beta_y;
+    thetaProp.phiX   = initVals(0);
+    thetaProp.sigmaX = initVals(1);
+    thetaProp.betaY  = initVals(2);
+    sigmaX(0) = thetaProp.sigmaX;
+    betaY(0)  = thetaProp.betaY;
     // Set variables related to the MH-step:
-    double mh_ratio      = 0.0;
-    double loglike_prop  = 0.0;
-    double logprior_prop = 0.0;
-    double rw_var_x = rw_mh_var(0);
-    double rw_var_y = rw_mh_var(1);
+    double mhRatio      = 0.0;
+    double loglikeProp  = 0.0;
+    double logpriorProp = 0.0;
+    double rwVarX = rwMHvar(0);
+    double rwVarY = rwMHvar(1);
     // Set variables related to progress monitoring of the overall procedure:
-    int progress_intervall_num = round(lMCMCits/num_progress_outputs);
-    double check_prog       = 0.0;
-    double progress_ratio   = 0.0;
-    double acceptance_rate  = 0.0;
-    int acceptance_rate_add = 0;
+    int progressIntervallNum = round(lMCMCits/numProgressOutputs);
+    double checkProg       = 0.0;
+    double progressRatio   = 0.0;
+    double acceptanceRate  = 0.0;
+    int acceptanceRateAdd = 0;
     try {
         //Initialize and run the sampler
-        my_move_pmmh = new SVmodelPMMH_move;
+        myMovePMMH = new SVmodelPMMHmove;
         smc::sampler<double,smc::nullParams> Sampler(lNumber,
                                                      HistoryType::NONE,
-                                                     my_move_pmmh);
+                                                     myMovePMMH);
         
-        Rcpp::NumericVector innovations_x = Rcpp::rnorm(lMCMCits, 0, rw_var_x);
-        Rcpp::NumericVector innovations_y = Rcpp::rnorm(lMCMCits, 0, rw_var_y);
-        Rcpp::NumericVector mh_unif_rand  = Rcpp::runif(lMCMCits);
+        Rcpp::NumericVector innovationsX = Rcpp::rnorm(lMCMCits, 0, rwVarX);
+        Rcpp::NumericVector innovationsY = Rcpp::rnorm(lMCMCits, 0, rwVarY);
+        Rcpp::NumericVector mhUnifRand  = Rcpp::runif(lMCMCits);
         
         // Getting a particle filtering estimate of the log likelihood.
-        Sampler.SetResampleParams(ResampleType::MULTINOMIAL, resample_freq);
+        Sampler.SetResampleParams(ResampleType::MULTINOMIAL, resampleFreq);
         Sampler.Initialise();
         Sampler.IterateUntil(lIterates-1);
         loglike(0) = Sampler.GetLogNCPath();
         
         // Inverse gamma prior calculations
-        logprior(0) = get_logprior_param(theta_prop);
+        logprior(0) = getLogPriorParam(thetaProp);
         Rcpp::Rcout << "Starting PMMH ..." << std::endl;
         for (unsigned int i = 1; i < lMCMCits + 1; ++i){
             // RW proposal for parameters
-            theta_prop.sigma_x = sigma_x(i - 1) + innovations_x(i - 1);
-            theta_prop.beta_y = beta_y(i - 1) + innovations_y(i - 1);
+            thetaProp.sigmaX = sigmaX(i - 1) + innovationsX(i - 1);
+            thetaProp.betaY = betaY(i - 1) + innovationsY(i - 1);
             
             // Getting a particle filtering estimate of the log likelihood.
             Sampler.Initialise();
             Sampler.IterateUntil(lIterates - 1);
-            loglike_prop = Sampler.GetLogNCPath();
+            loglikeProp = Sampler.GetLogNCPath();
             
             // Inverse gamma prior
-            logprior_prop = get_logprior_param(theta_prop);
+            logpriorProp = getLogPriorParam(thetaProp);
             
-            mh_ratio  = loglike_prop - loglike(i - 1);
-            mh_ratio += logprior_prop - logprior(i - 1);
-            mh_ratio  = exp(mh_ratio);
+            mhRatio  = loglikeProp - loglike(i - 1);
+            mhRatio += logpriorProp - logprior(i - 1);
+            mhRatio  = exp(mhRatio);
             
-            if (mh_ratio > mh_unif_rand(i - 1)){
-                sigma_x(i)  = theta_prop.sigma_x;
-                beta_y(i)   = theta_prop.beta_y;
-                loglike(i)  = loglike_prop;
-                logprior(i) = logprior_prop;
+            if (mhRatio > mhUnifRand(i - 1)){
+                sigmaX(i)  = thetaProp.sigmaX;
+                betaY(i)   = thetaProp.betaY;
+                loglike(i)  = loglikeProp;
+                logprior(i) = logpriorProp;
                 
-                acceptance_rate_add++;
+                acceptanceRateAdd++;
             } else {
-                sigma_x(i)  = sigma_x(i -1);
-                beta_y(i)   = beta_y(i -1);
+                sigmaX(i)  = sigmaX(i -1);
+                betaY(i)   = betaY(i -1);
                 loglike(i)  = loglike(i -1);
                 logprior(i) = logprior(i -1);
             }
-            check_prog = i % progress_intervall_num;
-            if (check_prog == 0) {
+            checkProg = i % progressIntervallNum;
+            if (checkProg == 0) {
                 Rcpp::Rcout << "#################################" << std::endl;
-                progress_ratio = (double(i)/lMCMCits)*100.0;
-                progress_ratio = round(progress_ratio);
+                progressRatio = (double(i)/lMCMCits)*100.0;
+                progressRatio = round(progressRatio);
                 Rcpp::Rcout << "Percentage completed: "
-                            << progress_ratio << "%." << std::endl;
+                            << progressRatio << "%." << std::endl;
                 
-                Rcpp::Rcout << "Current mean sigma_x: " <<
-                    arma::mean(sigma_x.head(i)) << std::endl;
-                Rcpp::Rcout << "Current mean beta_y:  " <<
-                    arma::mean(beta_y.head(i)) << std::endl;
+                Rcpp::Rcout << "Current mean sigmaX: " <<
+                    arma::mean(sigmaX.head(i)) << std::endl;
+                Rcpp::Rcout << "Current mean betaY:  " <<
+                    arma::mean(betaY.head(i)) << std::endl;
                 
-                acceptance_rate = (double(acceptance_rate_add)/i)*100.0;
-                acceptance_rate = round(acceptance_rate);
+                acceptanceRate = (double(acceptanceRateAdd)/i)*100.0;
+                acceptanceRate = round(acceptanceRate);
                 Rcpp::Rcout << "Current MH acceptance rate: "
-                            << acceptance_rate << "%." << std::endl;
+                            << acceptanceRate << "%." << std::endl;
             }
         }
-        delete my_move_pmmh;
+        delete myMovePMMH;
         
-        return Rcpp::List::create(Rcpp::Named("samples_sigma_x") = sigma_x,
-                                  Rcpp::Named("samples_beta_y") = beta_y,
+        return Rcpp::List::create(Rcpp::Named("samplesSigmaX") = sigmaX,
+                                  Rcpp::Named("samplesBetaY") = betaY,
                                   Rcpp::Named("loglike") = loglike,
                                   Rcpp::Named("logprior") = logprior);
     }
@@ -141,8 +141,8 @@ Rcpp::List sv_model_pmmh_cpp(arma::vec measurements,
     return R_NilValue; // to provide a return
 }
 namespace SVmodelPMMH {
-const double prior_a = 0.01;
-const double prior_b = 0.01;
+const double priorA = 0.01;
+const double priorB = 0.01;
 //' A function to calculate the log prior for a proposal.
 //' 
 //' The prior is IG(0.01,0.01).
@@ -151,12 +151,12 @@ const double prior_b = 0.01;
 //' 
 //' @return the log-prior ratio (part of the PMMH-ratio) to be combined with the
 //'   likelihood ratio
-double get_logprior_param(const parameters& proposal)
+double getLogPriorParam(const parameters& proposal)
 {
     double out = 0;
-    out += 2*prior_a*log(prior_b)-2*lgamma(prior_a);
-    out += -(prior_a+1)*log(proposal.sigma_x)-prior_b/proposal.sigma_x;
-    out += -(prior_a+1)*log(proposal.beta_y)-prior_b/proposal.beta_y;
+    out += 2*priorA*log(priorB)-2*lgamma(priorA);
+    out += -(priorA+1)*log(proposal.sigmaX)-priorB/proposal.sigmaX;
+    out += -(priorA+1)*log(proposal.betaY)-priorB/proposal.betaY;
     return(out);
 }
 }

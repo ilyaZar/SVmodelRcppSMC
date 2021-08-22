@@ -6,10 +6,10 @@ namespace SVmodelPMMH {
 // I. Define class for parameters
 class parameters {
 public:
-  double phi_x, sigma_x, beta_y;
+  double phiX, sigmaX, betaY;
 };
 // II. Derived class for the proposal/moves
-class SVmodelPMMH_move : public smc::moveset<double, smc::nullParams> {
+class SVmodelPMMHmove : public smc::moveset<double, smc::nullParams> {
 public:
   void pfInitialise(double& value,
                     double& logweight,
@@ -19,13 +19,13 @@ public:
               double& logweight,
               smc::nullParams& param);
   
-  ~SVmodelPMMH_move() {};
+  ~SVmodelPMMHmove() {};
 };
-double get_logprior_param(const parameters& proposal);
-parameters theta_prop;
-smc::moveset<double, smc::nullParams>* my_move_pmmh;
+double getLogPriorParam(const parameters& proposal);
+parameters thetaProp;
+smc::moveset<double, smc::nullParams>* myMovePMMH;
 
-arma::vec y_pmmh_simul;
+arma::vec yPMMHsimul;
 
 //' A function to initialize a particle 
 //' 
@@ -36,13 +36,14 @@ arma::vec y_pmmh_simul;
 //' @param param additional algorithm parameters
 //' 
 //' @return no return; modify in place
-void SVmodelPMMH_move::pfInitialise(double& X,
+void SVmodelPMMHmove::pfInitialise(double& X,
                                     double& logweight,
                                     smc::nullParams& param)
 {
-  X = R::rnorm(0.0, sqrt(5.0));
-  double sd = std::pow(theta_prop.beta_y, 0.5) * exp(0.5 * X);
-  logweight = R::dnorm(y_pmmh_simul(0), 0.0, sd,TRUE);
+  // X = R::rnorm(0.0, std::pow(thetaProp.sigmaX, 0.5) / pow((1 - pow(thetaProp.phiX, 2)), 0.5)); 
+  X = R::rnorm(0.0, thetaProp.sigmaX / pow((1 - pow(thetaProp.phiX, 2)), 0.5)); 
+  double sd = thetaProp.betaY * exp(0.5 * X);
+  logweight = R::dnorm(yPMMHsimul(0), 0.0, sd,TRUE);
 }
 //' The proposal function.
 //' 
@@ -54,14 +55,14 @@ void SVmodelPMMH_move::pfInitialise(double& X,
 //' @param param additional algorithm parameters
 //' 
 //' @return no return; modify in place
-void SVmodelPMMH_move::pfMove(long lTime,
+void SVmodelPMMHmove::pfMove(long lTime,
                               double& X,
                               double& logweight,
                               smc::nullParams& param)
 {
-  X  = theta_prop.phi_x * X;
-  X += R::rnorm(0.0, std::pow(theta_prop.sigma_x, 0.5));
-  double sd = std::pow(theta_prop.beta_y, 0.5) * exp(0.5 * X);
-  logweight += R::dnorm(y_pmmh_simul(lTime), 0.0, sd, TRUE);
+  X  = thetaProp.phiX * X;
+  X += R::rnorm(0.0, thetaProp.sigmaX);
+  double sd = thetaProp.betaY * exp(0.5 * X);
+  logweight += R::dnorm(yPMMHsimul(lTime), 0.0, sd, TRUE);
 }
 }

@@ -16,12 +16,36 @@ knitr::opts_chunk$set(
 
 ## SVmodelRcppSMC
 
-## Some more details:
+### Model description:
 
 The SV model equations (measurements and latent state transition) are given as:
 
-1. $`X_t|(X_{t-1} = x_{t-1})\sim\mathcal{N}\left(x_t|\phi x_{t-1}, \sigma^2\right)\;,`$
-2. $`Y_t|(X_t = x_t) \sim \mathcal{N}\left(y_t|0, \beta^2\exp(x_t)\right)\;.`$
+1. $X_t = f(X_{t-1}) = \phi X_{t-1} + \varepsilon_t, ~\varepsilon\sim\mathcal{N}(0, \sigma^2)$
+2. $Y_t = \beta\exp(X_t/2)\epsilon_t,\;~\epsilon_t\sim\mathcal{N}(0, 1)\;.$
+
+It follows that
+
+1. $X_t|(X_{t-1} = x_{t-1})\sim\mathcal{N}\left(x_t|\phi x_{t-1}, \sigma^2\right)\;,$
+2. $Y_t|(X_t = x_t) \sim \mathcal{N}\left(y_t|0, \beta^2\exp(x_t)\right)\;,$
+
+Assuming $\phi < 1$, the latent state process is stationary, i.e. 
+$\mathbb{E}(X_t)=\mathbb{E}(X_{t-1})\equiv \mu_x$ and 
+$\mathbb{V}(X_t)=\mathbb{V}(X_{t-1})=\sigma_x^2$, we have 
+
+\begin{align*}
+\mathbb{E}(X_t)&=\phi\mathbb{E}(X_{t-1}) + \mathbb{E}(\varepsilon_t)
+\Rightarrow \mu_x(1-\phi_x)=0 \Rightarrow \mu_x=\frac{0}{1-\phi_x}=0\;.\\
+\mathbb{V}(X_t)&=\phi^2\mathbb{V}(X_{t-1}) + \mathbb{V}(\varepsilon_t)
+\Rightarrow \mathbb{V}(X_t)(1-\phi^2)=\sigma^2\;.\\
+\Rightarrow \mathbb{V}(X_t)&=\frac{\sigma^2}{1-\phi^2}\;.
+\end{align*}
+
+Thus, the initial (stationary) distribution of $X_0$ is
+$$
+X_0\sim\mathcal{N}\left(0, \frac{\sigma^2}{1-\phi^2}\right)\;.
+$$
+
+### Prior distributions and full condtional Gibbs blocks
 
 Assuming that the variance parameters $\sigma^2$ and $\beta^2$ are unknown, but
 $\phi$ is fixed, we consider a Bayesian setting with standard inverse Gamma 
@@ -35,4 +59,4 @@ conditional Gibbs blocks are obtained with distribution for the parameter in
 closed form according to:
 
 5. $p\left(\sigma^2|x_{0:T}, y_{1:T}\right)=p(\sigma^2|x_{0:T})=\mathcal{IG}\left(\sigma^2|a+\frac{T}{2}, b+\frac{1}{2}\sum_{t=1}^T(x_t-\phi x_{t-1})^2\right)\;,$
-6. $p\left(\beta^2|x_{0:T}, y_{1:T}\right)=\mathcal{IG}\left(\beta^2|a+\frac{1}{2}, b+\frac{1}{2}\sum_{t=1}^T\exp\left(-x_t\right)y_t^2\right)\;.$
+6. $p\left(\beta^2|x_{0:T}, y_{1:T}\right)=\mathcal{IG}\left(\beta^2|a+\frac{T}{2}, b+\frac{1}{2}\sum_{t=1}^T\exp\left(-x_t\right)y_t^2\right)\;.$

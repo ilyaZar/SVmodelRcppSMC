@@ -22,6 +22,10 @@ public:
               double& value,
               double& logweight,
               smc::nullParams& param);
+  void pfWeight(long lTime,
+                double& value,
+                double& logweight,
+                smc::nullParams& param);
   
   ~SVmodelPGmove() {};
 };
@@ -31,7 +35,8 @@ arma::vec y;
 
 smc::moveset<double, smc::nullParams>* myMovePG;
 
-Parameters sampleGibbsParams(arma::vec y, arma::vec referenceTrajectory, 
+Parameters sampleGibbsParams(arma::vec y,
+                             const std::vector<double> & referenceTrajectoryX, 
                              const Parameters& currentParameterValues,
                              const Priors& GibbsPriors); 
 
@@ -48,7 +53,7 @@ void SVmodelPGmove::pfInitialise(double& X,
                                  double& logweight,
                                  smc::nullParams& param)
 {
-  X = R::rnorm(0.0, sqrt(5.0));
+  X = R::rnorm(0.0, Theta.sigmaX / pow((1 - pow(Theta.phiX, 2)), 0.5)); 
   double sd = std::pow(Theta.betaY, 0.5) * exp(0.5 * X);
   logweight = R::dnorm(y(0), 0.0, sd,TRUE);
 }
@@ -56,7 +61,7 @@ void SVmodelPGmove::pfInitialise(double& X,
 //' 
 //' Used implicitly by myMove at the corresponding particle class.
 //' 
-//' @param lTim     The sampler iteration.
+//' @param lTime     The sampler iteration.
 //' @param X            A reference to the current particle value
 //' @param logweight    A reference to the current particle log weight
 //' @param param additional algorithm parameters
@@ -68,8 +73,27 @@ void SVmodelPGmove::pfMove(long lTime,
                            smc::nullParams& param)
 {
   X  = Theta.phiX * X;
-  X += R::rnorm(0.0, std::pow(Theta.sigmaX, 0.5));
-  double sd = std::pow(Theta.betaY, 0.5) * exp(0.5 * X);
+  X += R::rnorm(0.0, Theta.sigmaX);
+  double sd = Theta.betaY * exp(0.5 * X);
+  logweight += R::dnorm(y(lTime), 0.0, sd, TRUE);
+}
+//' Weighting function of the conditional/reference particle coordinate.
+//' 
+//' Used implicitly by myMove at the corresponding (derived) conditional SMC
+//' class.
+//' 
+//' @param lTime     The sampler iteration.
+//' @param X            A reference to the current particle value
+//' @param logweight    A reference to the current particle log weight
+//' @param param additional algorithm parameters
+//' 
+//' @return no return; modify in place
+void SVmodelPGmove::pfWeight(long lTime,
+                             double& X,
+                             double& logweight,
+                             smc::nullParams& param)
+{
+  double sd = Theta.betaY * exp(0.5 * X);
   logweight += R::dnorm(y(lTime), 0.0, sd, TRUE);
 }
 }

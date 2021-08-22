@@ -33,7 +33,7 @@ plotPMCMCoutput <- function(outputPMCMC,
   plotParameterPostResults(samples = samplesList,
                            postMean = postMeanSigX,
                            trueVals = sigmaXtrue,
-                           expression_list = expressionsSigma,
+                           expressionList = expressionsSigma,
                            burnin = burnin,
                            MM = MM,
                            outTypeSimulation,
@@ -45,28 +45,28 @@ plotPMCMCoutput <- function(outputPMCMC,
   plotParameterPostResults(samples = samplesList,
                            postMean = postMeanBetZ,
                            trueVals = betaYtrue,
-                           expression_list = expressionsBeta,
+                           expressionList = expressionsBeta,
                            burnin = burnin,
                            MM = MM,
                            outTypeSimulation,
-                              fromAboveAfterBurnin = FALSE)
-  title_text <- paste0("Posterior Estimatation Results: ",
-                       "(red: post. mean; green: true values if provided)")
-  graphics::title(main = title_text,
+                           fromAboveAfterBurnin = FALSE)
+  titleText <- paste0("Posterior Estimatation Results: ",
+                      "(red: post. mean; green: true values if provided)")
+  graphics::title(main = titleText,
                   outer = TRUE)
   graphics::par(mfrow = c(1, 1))
 }
 plotParameterPostResults <- function(samples,
                                      postMean,
                                      trueVals,
-                                     expression_list,
+                                     expressionList,
                                      burnin,
                                      MM,
                                      outTypeSimulation,
                                      fromAboveAfterBurnin) {
-  expressionMain    <- expression_list[[1]]
-  expressionPar     <- expression_list[[2]]
-  expressionTrace   <- expression_list[[3]]
+  expressionMain   <- expressionList[[1]]
+  expressionPar    <- expressionList[[2]]
+  expressionTrace  <- expressionList[[3]]
   samplesMain      <- samples[[1]]
   samplesRemaining <- samples[[2]]
   graphics::hist(samplesMain[burnin:MM], 
@@ -123,31 +123,31 @@ plotParameterPostResults <- function(samples,
 #' autoregressive parameter phi, the number of simulations (for each individual)
 #' boxplot.
 #'
-#' @param out_log_like a matrix of dimension \code{length(par_seq_phi)} (rows)
-#'   times \code{num_simul}
-#' @param par_seq_phi parameter sequence for phi parameter for which a 
+#' @param outLogLike a matrix of dimension \code{length(parSeqPhi)} (rows)
+#'   times \code{numSimul}
+#' @param parSeqPhi parameter sequence for phi parameter for which a 
 #'   log-likelihood estimate is computed
-#' @param num_simul number of BPF runs per element of par_seq_phi
+#' @param numSimul number of BPF runs per element of parSeqPhi
 #'
 #' @return invisible return; pure side effect of a boxplot generation
 #' @export
-plot_boxplot_loglike_estimates <- function(out_log_like,
-                                           par_seq_phi,
-                                           num_simul) {
-  par_col   <- as.character(rep(par_seq_phi, times = num_simul))
-  llike_col <- as.vector(out_log_like)
-  data_boxplots <- data.frame(par_col, llike_col)
+plotBoxplotLogLikeEstimates <- function(outLogLike,
+                                        parSeqPhi,
+                                        numSimul) {
+  parCol   <- as.character(rep(parSeqPhi, times = numSimul))
+  llikeCol <- as.vector(outLogLike)
+  dataBoxplots <- data.frame(parCol, llikeCol)
   
-  names(data_boxplots) <- c("parameter", "loglike_value")
-  x_expression <- expression(paste("Parameter values for ", phi))
+  names(dataBoxplots) <- c("parameter", "loglikeValue")
+  xExpression <- expression(paste("Parameter values for ", phi))
   
-  p <- ggplot2::ggplot(data_boxplots,
+  p <- ggplot2::ggplot(dataBoxplots,
                        ggplot2::aes(x = .data$parameter,
-                                    y = .data$loglike_value)) +
+                                    y = .data$loglikeValue)) +
     ggplot2::geom_boxplot(varwidth = TRUE,
                           outlier.colour = "red",
                           outlier.shape = 1) +
-    ggplot2::scale_x_discrete(name =  x_expression) +
+    ggplot2::scale_x_discrete(name =  xExpression) +
     ggplot2::scale_y_continuous(name = "Log-likelihood values") +
     ggplot2::geom_jitter(width = 0.2)
   plot(p)

@@ -3,12 +3,9 @@
 \docType{package}
 \name{SVmodelRcppSMC}
 \alias{SVmodelRcppSMC}
-\title{SVmodelRcppSMC: A package providing examples for PMCMC estimation of the toy SV model}
+\title{SVmodelRcppSMC: A package for example implementations of PMCMC inference}
 \description{
-This package provides important functions. TO-DO
+This SVmodelRcppSMC package provides Particle Gibbs and Particle Gibbs with
+ancestor sampling estimation of the standard SV model using the more general
+RcppSMC package for the conditional SMC part of the algorithm.
 }
-\section{foo functions}{
-
-The foo functions ...
-}
-

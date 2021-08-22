@@ -1,18 +1,22 @@
 Package: SVmodelRcppSMC
-Type: Package
-Title: RcppSMC package example for a Stochastic volatitly model
+Title: RcppSMC package example for the Stochastic volatitly model
 Version: 0.0.900
-Date: 2021-03-17
-Authors@R: person("Ilya","Zarubin",role=c("aut","cre"), email="zarubin@wiso.uni-kolen.de")
-Description: An example of using RcppSMC package for a Stochastic volatitly model.
+Date: 2021-08-17
+Authors@R: person("Ilya","Zarubin",role=c("aut","cre"),
+                  email="ilya.a.zarub@googlemail.com")
+Description: An example of using the RcppSMC package to implement Particle
+    Gibbs type and Particle Marginal Metropolis Hastings algorithms for inference
+    in the classical "Stochastic Volatitly" model.
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: 
-    R (>= 3.5)
+    R (>= 4.0)
 Imports: 
+    Rcpp,
+    MASS,
     ggplot2,
     rlang
-LinkingTo: Rcpp, RcppArmadillo, RcppSMC
+LinkingTo: RcppSMC, Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 Suggests: 

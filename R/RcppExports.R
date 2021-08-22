@@ -7,13 +7,13 @@
 #'
 #' @param measurements arma::vec providing the measurements (or y or measurements)
 #' @param lNumber number of particles
-#' @param starting_vals arma::vec giving the three starting values for phi_x,
-#'   sigma_x and beta_y
+#' @param initVals arma::vec giving the three starting values for phiX,
+#'   sigmaX and betaY
 #' @return double; value of the log-likelihood estimated via the BPF
 #'
 #' @export
-bpf_loglike_sv <- function(measurements, lNumber, starting_vals) {
-    .Call(`_SVmodelRcppSMC_bpf_loglike_sv`, measurements, lNumber, starting_vals)
+svModelBpfLogLike <- function(measurements, lNumber, initVals) {
+    .Call(`_SVmodelRcppSMC_svModelBpfLogLike`, measurements, lNumber, initVals)
 }
 
 #' A function to calculate the log prior for a proposal.
@@ -33,18 +33,18 @@ NULL
 #' @param measurements arma::vec providing the measurements (or y or measurements)
 #' @param lNumber number of particles
 #' @param lMCMCits number of PMMH iterations
-#' @param starting_vals arma::vec giving the three starting values for phi_x,
-#'   sigma_x and beta_y
-#' @param rw_mh_var standard deviations for the RW-MH proposal step
-#' @param num_progress_outputs int giving the number of progress outputs i.e.
+#' @param initVals arma::vec giving the three starting values for phiX,
+#'   sigmaX and betaY
+#' @param rwMHvar standard deviations for the RW-MH proposal step
+#' @param numProgressOutputs int giving the number of progress outputs i.e.
 #'   if set to 10, then progress output occurs for every additional 10% of 
 #'   completion
-#' @return Rcpp::List containing the results: parameter samples (sigma_x, 
-#'   beta_y) and log-prior and log-likelihoood estimates
+#' @return Rcpp::List containing the results: parameter samples (sigmaX, 
+#'   betaY) and log-prior and log-likelihoood estimates
 #'
 #' @export
-sv_model_pmmh_cpp <- function(measurements, lNumber, lMCMCits, starting_vals, rw_mh_var, num_progress_outputs = 10L) {
-    .Call(`_SVmodelRcppSMC_sv_model_pmmh_cpp`, measurements, lNumber, lMCMCits, starting_vals, rw_mh_var, num_progress_outputs)
+svModelPMMHimpl <- function(measurements, lNumber, lMCMCits, initVals, rwMHvar, numProgressOutputs = 10L) {
+    .Call(`_SVmodelRcppSMC_svModelPMMHimpl`, measurements, lNumber, lMCMCits, initVals, rwMHvar, numProgressOutputs)
 }
 
 #' A function to sample model parameters from full conditional Gibbs blocks.
@@ -52,30 +52,35 @@ sv_model_pmmh_cpp <- function(measurements, lNumber, lMCMCits, starting_vals, rw
 #' The model parameters are \code{sigmaX} and \code{betaY}, passed via a 
 #' parameter class. The prior is set to \code{IG(0.01,0.01)}
 #'
-#' @param proposal a constant reference to proposed values of the parameters
+#' @param y an arma::vec of data measurements
+#' @param referenceTrajectoryX a std::vector<double> passing the 
+#'   reference trajectory
+#' @param GibbsParameters a class storing the Gibbs samples
+#' @param GibbsPriors a class storing the Gibbs sampler prior settings
 #'
 #' @return a parameter class 
 NULL
 
 #' Implementing PG for the toy SV model.
 #'
-#' The main cpp-function powering the R wrapper.
+#' The main cpp-function powering the R wrapper for the PG sampler.
 #'
-#' @param measurements arma::vec providing the measurements (or y or measurements)
+#' @param measurements arma::vec providing the measurements
 #' @param lNumber number of particles
 #' @param lMCMCits number of PG iterations
 #' @param initVals arma::vec giving the three starting values for phiX,
 #'   sigmaX and betaY
-#' @param initReferenceTrajectory standard deviations for the RW-MH proposal step
-#' @param num_progress_outputs int giving the number of progress outputs i.e.
+#' @param initReferenceTrajectory initial reference trajectory values to 
+#'   condition on
+#' @param numProgressOutputs int giving the number of progress outputs i.e.
 #'   if set to 10, then progress output occurs for every additional 10% of 
 #'   completion
-#' @return Rcpp::List containing the results: parameter samples (sigmaX, 
-#'   betaY) and log-prior and log-likelihoood estimates
+#' @return Rcpp::List containing the results: parameter samples sigmaX, 
+#'   betaY
 #'
 #' @export
-svmodelPGimpl <- function(measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, num_progress_outputs = 10L) {
-    .Call(`_SVmodelRcppSMC_svmodelPGimpl`, measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, num_progress_outputs)
+svModelPGimpl <- function(measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, numProgressOutputs = 10L) {
+    .Call(`_SVmodelRcppSMC_svModelPGimpl`, measurements, lNumber, lMCMCits, initVals, initReferenceTrajectory, numProgressOutputs)
 }
 
 #' Implementing PMMH for the toy SV model.
@@ -85,8 +90,8 @@ svmodelPGimpl <- function(measurements, lNumber, lMCMCits, initVals, initReferen
 #' @param measurements arma::vec providing the measurements (or y or
 #' measurements)
 #' @param lNumber number of particles
-#' @param starting_vals arma::vec giving the three starting values for phi_x,
-#'   sigma_x and beta_y
+#' @param initVals arma::vec giving the three starting values for phiX,
+#'   sigmaX and betaY
 #' @param resampleFreq  frequency at which resampling is performed; if
 #'   negative, then resampling is never performed; if between [0,1), then
 #'   resampling is performed when  the ESS falls below that proportion of the
@@ -94,11 +99,11 @@ svmodelPGimpl <- function(measurements, lNumber, lMCMCits, initVals, initReferen
 #'   is carried out when the ESS falls below that value (note: if this
 #'   parameter is larger than the total number of particles, then resampling
 #'   will always be performed!)
-#' @return Rcpp::List containing the results: parameter samples (sigma_x, 
-#'   beta_y) and log-prior and log-likelihoood estimates
+#' @return Rcpp::List containing the results: parameter samples (sigmaX, 
+#'   betaY) and log-prior and log-likelihoood estimates
 #'
 #' @export
-sv_model_al_tracking_impl <- function(measurements, starting_vals, lNumber, resampleFreq = 0.5) {
-    .Call(`_SVmodelRcppSMC_sv_model_al_tracking_impl`, measurements, starting_vals, lNumber, resampleFreq)
+svModelALtrackingImp <- function(measurements, initVals, lNumber, resampleFreq = 0.5) {
+    .Call(`_SVmodelRcppSMC_svModelALtrackingImp`, measurements, initVals, lNumber, resampleFreq)
 }
 

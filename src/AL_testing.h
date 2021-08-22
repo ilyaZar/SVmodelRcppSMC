@@ -6,7 +6,7 @@ namespace ALtesting {
 
 class parameters {
 public:
-  double phi_x, sigma_x, beta_y;
+  double phiX, sigmaX, betaY;
 };
 
 class ALtracking_move: public smc::moveset<double, smc::nullParams> {
@@ -22,10 +22,10 @@ public:
   ~ALtracking_move() {};
 };
 
-parameters theta_prop;
+parameters thetaProp;
 smc::moveset<double, smc::nullParams>* my_move_al;
 
-arma::vec y_pmmh_simul;
+arma::vec yPMMHsimul;
 
 //' A function to initialize a particle
 //' 
@@ -41,8 +41,8 @@ void ALtracking_move::pfInitialise(double& X,
                                    smc::nullParams& param)
 {
   X = R::rnorm(0.0, sqrt(5.0));
-  double sd = std::pow(theta_prop.beta_y, 0.5) * exp(0.5 * X);
-  logweight = R::dnorm(y_pmmh_simul(0), 0.0, sd,TRUE);
+  double sd = std::pow(thetaProp.betaY, 0.5) * exp(0.5 * X);
+  logweight = R::dnorm(yPMMHsimul(0), 0.0, sd,TRUE);
 }
 //' The proposal function.
 //' 
@@ -59,9 +59,9 @@ void ALtracking_move::pfMove(long lTime,
                              double& logweight,
                              smc::nullParams& param)
 {
-  X  = theta_prop.phi_x * X;
-  X += R::rnorm(0.0, std::pow(theta_prop.sigma_x, 0.5));
-  double sd = std::pow(theta_prop.beta_y, 0.5) * exp(0.5 * X);
-  logweight += R::dnorm(y_pmmh_simul(lTime), 0.0, sd, TRUE);
+  X  = thetaProp.phiX * X;
+  X += R::rnorm(0.0, std::pow(thetaProp.sigmaX, 0.5));
+  double sd = std::pow(thetaProp.betaY, 0.5) * exp(0.5 * X);
+  logweight += R::dnorm(yPMMHsimul(lTime), 0.0, sd, TRUE);
 }
 }

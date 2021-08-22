@@ -6,10 +6,10 @@ namespace SVmodelLogLike {
 // I. Define class for parameters
 class parameters {
 public:
-  double phi_x, sigma_x, beta_y;
+  double phiX, sigmaX, betaY;
 };
 // II. Derived class for the proposal/moves
-class SVmodelPMMH_LogLike : public smc::moveset<double, smc::nullParams> {
+class SVmodelLogLikeMove : public smc::moveset<double, smc::nullParams> {
 public:
   void pfInitialise(double& value,
                     double& logweight,
@@ -19,12 +19,12 @@ public:
               double& logweight,
               smc::nullParams& param);
   
-  ~SVmodelPMMH_LogLike() {};
+  ~SVmodelLogLikeMove() {};
 };
-parameters theta_prop;
-smc::moveset<double, smc::nullParams>* my_move_loglike;
+parameters thetaProp;
+smc::moveset<double, smc::nullParams>* myMoveLogLike;
 
-arma::vec y_returns;
+arma::vec yReturn;
 
 //' A function to initialize a particle 
 //' 
@@ -35,13 +35,13 @@ arma::vec y_returns;
 //' @param param additional algorithm parameters
 //' 
 //' @return no return; modify in place
-void SVmodelPMMH_LogLike::pfInitialise(double& X,
-                                       double& logweight,
-                                       smc::nullParams& param)
+void SVmodelLogLikeMove::pfInitialise(double& X,
+                                      double& logweight,
+                                      smc::nullParams& param)
 {
-  X = R::rnorm(0.0, theta_prop.sigma_x / pow((1 - pow(theta_prop.phi_x, 2)), 0.5));
-  double sd = theta_prop.beta_y * exp(0.5 * X);
-  logweight = R::dnorm(y_returns(0), 0.0, sd,TRUE);
+  X = R::rnorm(0.0, thetaProp.sigmaX / pow((1 - pow(thetaProp.phiX, 2)), 0.5));
+  double sd = std::pow(thetaProp.betaY, 0.5) * exp(0.5 * X);
+  logweight = R::dnorm(yReturn(0), 0.0, sd,TRUE);
 }
 //' The proposal function.
 //' 
@@ -53,14 +53,14 @@ void SVmodelPMMH_LogLike::pfInitialise(double& X,
 //' @param param additional algorithm parameters
 //' 
 //' @return no return; modify in place
-void SVmodelPMMH_LogLike::pfMove(long lTime,
-                              double& X,
-                              double& logweight,
-                              smc::nullParams& param)
+void SVmodelLogLikeMove::pfMove(long lTime,
+                                double& X,
+                                double& logweight,
+                                smc::nullParams& param)
 {
-  X  = theta_prop.phi_x * X;
-  X += R::rnorm(0.0, theta_prop.sigma_x);
-  double sd = theta_prop.beta_y * exp(0.5 * X);
-  logweight += R::dnorm(y_returns(lTime), 0.0, sd, TRUE);
+  X  = thetaProp.phiX * X;
+  X += R::rnorm(0.0, thetaProp.sigmaX);
+  double sd = thetaProp.betaY * exp(0.5 * X);
+  logweight += R::dnorm(yReturn(lTime), 0.0, sd, TRUE);
 }
 }
